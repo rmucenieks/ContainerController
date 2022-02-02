@@ -82,7 +82,8 @@ open class ContainerController: NSObject {
     }
     
     private var isPortrait: Bool {
-        return ContainerDevice.isPortrait
+        //If rotation is disabled, then by default it will be portrait
+        return layout.disableRotation ? true : ContainerDevice.isPortrait
     }
     
     private var deviceHeight: CGFloat {
@@ -178,7 +179,9 @@ open class ContainerController: NSObject {
         self.controller = controller
         set(layout: layout)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(rotated), name: UIDevice.orientationDidChangeNotification, object: nil)
+        if !layout.disableRotation {
+            NotificationCenter.default.addObserver(self, selector: #selector(rotated), name: UIDevice.orientationDidChangeNotification, object: nil)
+        }
         
         createShadowButton()
         createContainerView()
@@ -211,7 +214,7 @@ open class ContainerController: NSObject {
     
     @objc func rotated() {
         
-        if !UIDevice.current.orientation.isRotateAllowed { return }
+        if !UIDevice.current.orientation.isRotateAllowed || layout.disableRotation { return }
         
         if ContainerDevice.orientation == oldOrientation { return }
         oldOrientation = ContainerDevice.orientation
