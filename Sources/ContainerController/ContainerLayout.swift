@@ -117,9 +117,9 @@ open class ContainerLayout {
     public var landscapeInsets: ContainerInsets?
     
     /**
-     This parameter for disabling autorotation. If this is disabled, then  there will be portrait only
+     This parameter for disabling autorotation. By default it is disabled, so it means by default allows portrait only
     */
-    public var disableRotation: Bool = false
+    public var disableRotation: Bool = true
     
     public init() {
         
